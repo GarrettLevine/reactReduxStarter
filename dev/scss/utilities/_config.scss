@@ -1,0 +1,99 @@
+// ==========================================================================
+// Global Config
+// ==========================================================================
+
+//==================================
+// FONT PRESETS
+//==================================
+$font-url--google-font--1   : 'https://fonts.googleapis.com/css?family=Raleway';
+$font-url--google-font--2  : 'https://fonts.googleapis.com/css?family=Merriweather';
+
+
+@import url($font-url--google-font--1);
+@import url($font-url--google-font--2);
+
+//Font Weight Presets
+$font-weight--thin       		 : 100;
+$font-weight--light      		 : 300;
+$font-weight--medium     			: 400;
+$font-weight--bold       	 	: 700;
+$font-weight--ultra-bold  		: 900;
+
+//Font Stacks
+$font-family--heading: 'Raleway', sans-serif;
+$font-family--body: 'Merriweather', serif;
+
+//==================================
+// DESCRIPTIVE COLORS
+//==================================
+
+//example
+$steel							: #666666;
+
+//==================================
+// COLOR USAGE
+//==================================
+$white       : #FFF;
+$black       : #000;
+$grey        : #616161; 
+
+
+//==================================
+//	TEXT SETTINGS							
+//==================================
+
+// Text
+$base__font-size 		: 1.6rem;
+$base__line      	 : 2.4rem;
+$letter-space      : 0.5rem;
+$line-height							: 1.5;
+
+//heading size list
+$h1-font-size    : 3.6rem;
+$h2-font-size    : 3.2rem;
+$h3-font-size    : 2.8rem;
+$h4-font-size    : 2rem;
+$h5-font-size    : 1.6rem;
+$h6-font-size    : 1.2rem;
+
+//heading maps
+$heading-list: (
+	h1: $h1-font-size,
+	h2: $h2-font-size,
+	h3: $h3-font-size,
+	h4: $h4-font-size,
+	h5: $h5-font-size,
+	h6: $h6-font-size
+);
+
+
+// Border radius
+$br--card    			: 0.2rem;
+$br--round      : 50%;
+
+// Transitions
+$trns-duration  : .5s;
+
+// Path to Assets
+$path--rel      : "../assets";
+
+//max-width
+$max-width--tablet		: 65rem;
+$max-width--desktop	: 112rem;
+
+// Breakpoints
+$brkpoint-sm    : 1px;
+$brkpoint-md    : 768px;
+$brkpoint-lg    :  940px;
+$brkpoint-xlg   : 100px;
+
+//z-index
+$z-index--1			: 100;
+$z-index--2			: 200;
+$z-index--3			: 300;
+$z-index--4			: 400;
+$z-index--5			: 500;
+$z-index--6			: 600;
+$z-index--7			: 700;
+$z-index--8			: 800;
+$z-index--9			: 900;

@@ -1,0 +1,89 @@
+//===============================
+// MEDIA QUERY MIXIN
+//===============================
+
+@mixin mq($break) {
+  @if $break == "small" {
+    @media (min-width: $brkpoint-sm) and (max-width: $brkpoint-md) {
+    @content;
+  } 
+ } @else if $break == "medium" {
+    @media (min-width: $brkpoint-md + 1) {
+    @content;
+    }
+  } 
+   @else if $break == "large" {
+    @media (min-width: $brkpoint-lg) {
+     @content;
+    }
+  }
+  @else if $break == "x-large" {
+    @media (min-width: $brkpoint-xlg) {
+      @content;
+    }
+  }
+   @else {
+    @error "Whoops! no value could be retried for '#{$break}'!";
+  }
+}
+
+//===============================
+// IMAGE MIXINS
+//===============================
+
+
+//image replacement
+@mixin img-replace($img, $w, $h, $disp: block) {
+  background-image: url('#{$path--rel}/#{$img}');
+  background-repeat: no-repeat;
+  width: $w;
+  height: $h;
+  display: $disp;
+  @content;
+}
+
+//background mixin'
+
+@mixin gradient-background-img($imageName, $gradient) {
+  background: $gradient,
+            url(../assets/rooms/#{$imageName}.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+//blur image
+@mixin blur-filter($x) {
+  -webkit-filter: blur($x);
+  -moz-filter: blur($x);
+  -o-filter: blur($x);
+  -ms-filter: blur($x);
+  filter: blur($x);
+}
+
+//===============================
+// BUTTONS
+//===============================
+
+@mixin themed-button($height, $width, $background: $primary-color, $font: $white) {
+  @extend %button-styles;
+  background: $background;
+  color: $font;
+
+  height: $height;
+  width: $width;
+
+  &:hover {
+    @extend %box-shadow-hover;
+    background-color: $tertiary-color;
+  }
+
+  &:active {
+    @extend %tb-box-shadow;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+
