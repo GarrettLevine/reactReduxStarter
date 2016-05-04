@@ -1,18 +1,17 @@
 {
-  "name": "challenge-garrett",
+  "name": "reactReduxStarter",
   "version": "0.1.0",
-  "description": "Frontend Dev Challenge",
   "main": "server.js",
   "scripts": {
     "start": "node_modules/nodemon/bin/nodemon.js -- node_modules/babel/bin/babel-node.js server.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/twitsprout/challenge-garrett"
+    "url": "https://github.com/GarrettLevine/reactReduxStarter.git"
   },
-  "author": "CrowdRiff",
+  "author": "Garrett Levine",
   "license": "None",
-  "private": true,
+  "private": false,
   "dependencies": {
     "express": "^4.13.4",
     "lodash": "^4.6.1",
