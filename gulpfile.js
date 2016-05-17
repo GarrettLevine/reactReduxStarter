@@ -1,3 +1,7 @@
+'use strict'
+
+require('babel-register');
+
 var source = require('vinyl-source-stream');
 var gulp = require('gulp');
 var gutil = require('gulp-util');
@@ -5,6 +9,9 @@ var browserify = require('browserify');
 var babelify = require('babelify');
 var watchify = require('watchify');
 var notify = require('gulp-notify');
+
+var mocha = require('gulp-mocha');
+var istanbul = require('gulp-istanbul');
 
 var sass = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
@@ -22,11 +29,6 @@ var historyApiFallback = require('connect-history-api-fallback')
 */
 
 gulp.task('styles',function() {
-  // move over fonts
-
-  gulp.src('./dev/assets/fonts/**.*')
-    .pipe(gulp.dest('./public/assets/fonts'))
-
   // Compiles CSS
   gulp.src('./dev/scss/**/*.scss')
     .pipe(sass())
@@ -67,11 +69,18 @@ function buildScript(file, watch) {
     debug : true,
     cache: {},
     packageCache: {},
-    transform:  [babelify.configure({stage : 0 })]
+    transform:  babelify.configure({
+      presets: ["es2015", "react"],
+      "plugins": ["transform-object-rest-spread", "transform-object-assign"]
+    })
   };
 
   // watchify() if watch requested, otherwise run browserify() once 
   var bundler = watch ? watchify(browserify(props)) : browserify(props);
+
+  bundler.external('react/addons');
+  bundler.external('react/lib/ReactContext');
+  bundler.external('react/lib/ExecutionEnvironment');
 
   function rebundle() {
     var stream = bundler.bundle();
@@ -97,9 +106,20 @@ function buildScript(file, watch) {
   return rebundle();
 }
 
+gulp.task('test:react', function() {
+  var hasError = false;
+  return gulp.src('./dev/js/**/*.test.js')
+    .pipe(mocha({
+      require: ['./dev/js/test/helpers']
+    }))
+    .on('error', gutil.log);
+});
+
 gulp.task('scripts', function() {
   return buildScript('index.js', false); // this will run once because we set watch to false
 });
+
+gulp.task('test', ['test:react']);
 
 // run 'scripts' task first, then watch for future changes
 gulp.task('default', ['images','styles','scripts','browser-sync'], function() {
