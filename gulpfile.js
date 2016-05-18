@@ -12,6 +12,8 @@ var notify = require('gulp-notify');
 
 var mocha = require('gulp-mocha');
 var istanbul = require('gulp-istanbul');
+var isparta = require('isparta');
+var runSequence = require('run-sequence');
 
 var sass = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
@@ -115,8 +117,25 @@ gulp.task('test:react', function() {
     .on('error', gutil.log);
 });
 
+gulp.task('coverage:instrument', function() {
+  return gulp.src('.dev/js/**/*.js')
+    .pipe(istanbul({
+      instrumenter: isparta.Instrumenter
+    }))
+    .pipe(istanbul.hookRequire());
+});
+
+gulp.task('coverage:report', function() {
+  return gulp.src('./dev/js/**/*.js', {read: false})
+  .pipe(istanbul.writeReports());
+});
+
 gulp.task('scripts', function() {
   return buildScript('index.js', false); // this will run once because we set watch to false
+});
+
+gulp.task('test:coverage', function(done) {
+  runSequence('coverage:instrument', 'test:react', 'coverage:report', done);
 });
 
 gulp.task('test', ['test:react']);

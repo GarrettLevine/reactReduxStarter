@@ -1,2 +1,7 @@
 *.scssc
 node_modules
+
+coverage
+
+public/css/main.css
+public/js/main.js
