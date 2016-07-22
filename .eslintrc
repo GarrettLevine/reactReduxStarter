@@ -1,0 +1,38 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true,
+      "experimentalObjectRestSpread": true
+    },
+  },
+  "env": {
+    "browser": true,
+    "es6": true,
+    "mocha": true
+  },
+  "extends": "airbnb",
+  "rules": {
+    "spaced-comment": 0, // for crazy header things I make
+    "no-console": 0, // console logs for dev, turned off for time being
+    "array-bracket-spacing": 0, // Problematic for ES6 destructuring
+    "new-cap": 0, // new keyword?
+    "space-before-function-paren": 0,
+    "no-trailing-spaces": [2, { "skipBlankLines": true }], // weird issues with space indentation
+    "react/prop-types": 1, // Don't want it to break build
+    "no-useless-constructor": 0, // Unnecessary with prefer stateless
+    "react/prefer-stateless-function": 1,
+    "no-extra-parens": 0, // in arrow functions, do we use parens or no?
+    "object-shorthand": 0, // confusing when some properties can use it, and others cannot
+    "consistent-return": 0, // possible confusion when returns might be of done function
+    "no-unused-vars": 0, // Problematic for ES6 array destructuring
+    "arrow-body-style": 0,
+    "max-len": [1, 100, 2, { "ignoreComments": true, "ignoreTrailingComments": true}],
+    "no-multiple-empty-lines": 1, // to not break build
+    "padded-blocks": 1 // to not break build
+  },
+  "plugins": [
+    "react"
+  ]
+}

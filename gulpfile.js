@@ -1,95 +1,120 @@
+//*************************************************
+//     I M P O R T S
+//*************************************************
 'use strict'
 
 require('babel-register');
+const gulp = require('gulp');
 
-var source = require('vinyl-source-stream');
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var browserify = require('browserify');
-var babelify = require('babelify');
-var watchify = require('watchify');
-var notify = require('gulp-notify');
+const source = require('vinyl-source-stream');
+const gutil = require('gulp-util');
+const browserify = require('browserify');
+const babelify = require('babelify');
+const watchify = require('watchify');
+const notify = require('gulp-notify');
 
-var mocha = require('gulp-mocha');
-var istanbul = require('gulp-istanbul');
-var isparta = require('isparta');
-var runSequence = require('run-sequence');
+const eslint = require('gulp-eslint');
 
-var sass = require('gulp-sass');
-var autoprefixer = require('gulp-autoprefixer');
-var uglify = require('gulp-uglify');
-var rename = require('gulp-rename');
-var buffer = require('vinyl-buffer');
+const sass = require('gulp-sass');
+const autoprefixer = require('gulp-autoprefixer');
+const uglify = require('gulp-uglify');
+const rename = require('gulp-rename');
+const util = require ('gulp-util');
+const buffer = require('vinyl-buffer');
 
-var browserSync = require('browser-sync');
-var reload = browserSync.reload;
-var historyApiFallback = require('connect-history-api-fallback')
+const mocha = require('gulp-mocha');
+const runSequence = require('run-sequence');
+const istanbul = require('gulp-istanbul');
+const isparta = require('isparta');
 
+const browserSync = require('browser-sync');
+const reload = browserSync.reload;
+const historyApiFallback = require('connect-history-api-fallback')
 
-/*
-  Styles Task
-*/
+//*************************************************
+//     P A T H S
+//*************************************************
+const paths = {
+  dev: {
+    js: "./dev/js/**/*.js",
+    scss: "./dev/scss/**/*.scss"
+  },
+  test: {
+    js: "./dev/js/**/*.test.js"
+  },
+  public: {
+    js: "./public/js/",
+    css: "./public/css/"
+  }
+}
 
-gulp.task('styles',function() {
+//*************************************************
+//     S T Y L E S    T A S K
+//*************************************************
+gulp.task('styles', () => {
   // Compiles CSS
-  gulp.src('./dev/scss/**/*.scss')
+  gulp.src(paths.dev.scss)
     .pipe(sass())
     .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1'))
-    .pipe(gulp.dest('./public/css/'))
+    .pipe(gulp.dest(paths.public.css))
     .pipe(reload({stream:true}))
 });
 
-/*
-  Images
-*/
-gulp.task('images',function(){
-  gulp.src('./dev/assets/images/**')
-    .pipe(gulp.dest('./public/assets/images'))
-});
-
-/*
-  Browser Sync
-*/
-gulp.task('browser-sync', function() {
+//*************************************************
+//     B R O W S E R   S Y N C
+//*************************************************
+gulp.task('browser-sync', () => {
   browserSync.init({
-    server: './public'  
+    server: './public',
   })
 });
 
 function handleErrors() {
-  var args = Array.prototype.slice.call(arguments);
+  const args = Array.prototype.slice.call(arguments);
   notify.onError({
     title: 'Compile Error',
     message: '<%= error.message %>'
   }).apply(this, args);
   this.emit('end'); // Keep gulp from hanging on this task
 }
+//*************************************************
+//     E S    L I N T 
+//*************************************************
+gulp.task('lint', () => {
+  return gulp.src([paths.dev.js, '!node_modules/**'])
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
+});
+//*************************************************
+//     J S    B U I L D S C R I P T
+//*************************************************
 
 function buildScript(file, watch) {
-  var props = {
+  const props = {
     entries: ['./dev/js/' + file],
     debug : true,
     cache: {},
     packageCache: {},
-    transform:  babelify.configure({
-      presets: ["es2015", "react"],
-      "plugins": ["transform-object-rest-spread", "transform-object-assign"]
-    })
+    transform: babelify.configure({
+      presets: ['es2015', 'react'], 
+      plugins: ['transform-object-rest-spread', 'transform-object-assign'],
+    }),
   };
 
   // watchify() if watch requested, otherwise run browserify() once 
-  var bundler = watch ? watchify(browserify(props)) : browserify(props);
+  const bundler = watch ? watchify(browserify(props)) : browserify(props);
 
   bundler.external('react/addons');
   bundler.external('react/lib/ReactContext');
   bundler.external('react/lib/ExecutionEnvironment');
 
   function rebundle() {
-    var stream = bundler.bundle();
+    const stream = bundler.bundle();
     return stream
       .on('error', handleErrors)
       .pipe(source(file))
-      .pipe(gulp.dest('./public/js/'))
+      .pipe(gulp.dest(paths.public.js))
       // If you also want to uglify it
       // .pipe(buffer())
       // .pipe(uglify())
@@ -99,7 +124,7 @@ function buildScript(file, watch) {
   }
 
   // listen for an update and run rebundle
-  bundler.on('update', function() {
+  bundler.on('update', () => {
     rebundle();
     gutil.log('Rebundle...');
   });
@@ -108,41 +133,61 @@ function buildScript(file, watch) {
   return rebundle();
 }
 
-gulp.task('test:react', function() {
-  var hasError = false;
-  return gulp.src('./dev/js/**/*.test.js')
-    .pipe(mocha({
-      require: ['./dev/js/test/helpers']
-    }))
-    .on('error', gutil.log);
+gulp.task('scripts', () => {
+  return buildScript('index.js', false); // this will run once because we set watch to false
 });
 
-gulp.task('coverage:instrument', function() {
-  return gulp.src('.dev/js/**/*.js')
+//*************************************************
+//     T E S T / C O V E R A G E   T A S K S
+//*************************************************
+gulp.task('coverage:instrument', () => { 
+  return gulp.src(paths.dev.js)
     .pipe(istanbul({
-      instrumenter: isparta.Instrumenter
+      instrumenter: isparta.Instrumenter,
     }))
     .pipe(istanbul.hookRequire());
 });
 
-gulp.task('coverage:report', function() {
-  return gulp.src('./dev/js/**/*.js', {read: false})
-  .pipe(istanbul.writeReports());
+gulp.task('test:react', () => {
+    const hasError = false;
+    return gulp.src(paths.test.js)
+      .pipe(mocha({
+        require: ['./test/helpers']
+      }))
+      .on('error', util.log);
 });
 
-gulp.task('scripts', function() {
-  return buildScript('index.js', false); // this will run once because we set watch to false
+
+gulp.task('coverage:report', (done) => {
+  console.log('report');
+  return gulp.src([paths.dev.js], {read: false})
+    .pipe(istanbul.writeReports());
 });
 
-gulp.task('test:coverage', function(done) {
-  runSequence('coverage:instrument', 'test:react', 'coverage:report', done);
+/**
+ * Run unit tests
+ */
+gulp.task('test', function(done) {
+  return gulp.src(paths.test.js, {read: false})
+    .pipe(mocha({
+      require: ['./test/helpers.js'] // Prepare environement for React/JSX testing
+    }));
 });
 
-gulp.task('test', ['test:react']);
+gulp.task('test:coverage', (done) => {
+  runSequence('coverage:instrument', 'test', 'coverage:report', done);
+});
 
-// run 'scripts' task first, then watch for future changes
-gulp.task('default', ['images','styles','scripts','browser-sync'], function() {
-  gulp.watch('./dev/scss/**/*', ['styles']); // gulp watch for stylus changes
-  gulp.watch('./dev/js/**/*', ['scripts']); // gulp watch for stylus changes
+// gulp.task('test', ['test:react']);
+
+
+//*************************************************
+//     G U L P   W A T C H
+//*************************************************
+gulp.task('default', ['styles','scripts','browser-sync'], () => {
+  gulp.watch(paths.dev.scss, ['styles']); // gulp watch for stylus changes
+  gulp.watch(paths.dev.js, ['scripts']); // gulp watch for JS changes
   return buildScript('index.js', true); // browserify watch for JS changes
 });
+
+gulp.task('build', ['styles', 'scripts']);
