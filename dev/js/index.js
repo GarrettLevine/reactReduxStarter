@@ -1,15 +1,24 @@
+//*************************************************
+//    M O D U L E   I M P O R T S
+//*************************************************
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import { Router, browserHistory } from 'react-router';
 
-import App from './components/app';
-import reducers from './reducers';
+//*************************************************
+//    C O M P O N E N T   I M P O R T S
+//*************************************************
+import routes from './routes';
+import configureStore from './store/configure-store.js';
 
-const createStoreWithMiddleware = applyMiddleware()(createStore);
+const store = configureStore();
 
+//**************************************************
+//    R E N D E R
+//**************************************************
 ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
-    <App />
+  <Provider store={store}>
+    <Router routes={routes} />
   </Provider>
   , document.querySelector('.main'));
