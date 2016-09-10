@@ -36,15 +36,17 @@ const historyApiFallback = require('connect-history-api-fallback')
 //*************************************************
 const paths = {
   dev: {
-    js: "./dev/js/**/*.js",
-    scss: "./dev/scss/**/*.scss"
+    index: './dev/index.hmtl',
+    js: './dev/js/**/*.js',
+    scss: './dev/scss/**/*.scss',
+    assets: './dev/assets/*',
   },
   test: {
-    js: "./dev/js/**/*.test.js"
+    js: './dev/js/**/*.test.js',
   },
   public: {
-    js: "./public/js/",
-    css: "./public/css/"
+    js: './public/js/',
+    css: './public/css/',
   }
 }
 
@@ -180,7 +182,17 @@ gulp.task('test:coverage', (done) => {
 
 // gulp.task('test', ['test:react']);
 
+//*************************************************
+//     M I G R A T E   F I L E S
+//*************************************************
+gulp.task('copy-index-html', () => {
+  return gulp.src(paths.dev.html)
+    .pipe(gulp.dest('./public'));
+});
 
+gulp.task('copy-assets', () => {
+  return gulp.src()
+})
 //*************************************************
 //     G U L P   W A T C H
 //*************************************************
