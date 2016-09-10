@@ -191,7 +191,8 @@ gulp.task('copy-index-html', () => {
 });
 
 gulp.task('copy-assets', () => {
-  return gulp.src()
+  return gulp.src(paths.dev.assets)
+    .pipe(gulp.dest('./public/assets'));
 })
 //*************************************************
 //     G U L P   W A T C H
