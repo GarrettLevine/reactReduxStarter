@@ -186,12 +186,12 @@ gulp.task('test:coverage', (done) => {
 //     M I G R A T E   F I L E S
 //*************************************************
 gulp.task('copy-index-html', () => {
-  return gulp.src(paths.dev.html)
+  return gulp.src(paths.dev.html, { read: false })
     .pipe(gulp.dest('./public'));
 });
 
 gulp.task('copy-assets', () => {
-  return gulp.src(paths.dev.assets)
+  return gulp.src(paths.dev.assets, { read: false })
     .pipe(gulp.dest('./public/assets'));
 })
 //*************************************************
