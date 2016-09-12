@@ -36,7 +36,7 @@ const historyApiFallback = require('connect-history-api-fallback')
 //*************************************************
 const paths = {
   dev: {
-    index: './dev/index.hmtl',
+    index: './dev/index.html',
     js: './dev/js/**/*.js',
     scss: './dev/scss/**/*.scss',
     assets: './dev/assets/*',
@@ -186,18 +186,18 @@ gulp.task('test:coverage', (done) => {
 //     M I G R A T E   F I L E S
 //*************************************************
 gulp.task('copy-index-html', () => {
-  return gulp.src(paths.dev.html, { read: false })
-    .pipe(gulp.dest('./public'));
+  return gulp.src(paths.dev.index)
+    .pipe(gulp.dest('./public/'));
 });
 
 gulp.task('copy-assets', () => {
-  return gulp.src(paths.dev.assets, { read: false })
+  return gulp.src(paths.dev.assets)
     .pipe(gulp.dest('./public/assets'));
 })
 //*************************************************
 //     G U L P   W A T C H
 //*************************************************
-gulp.task('default', ['styles','scripts','browser-sync'], () => {
+gulp.task('default', ['styles','scripts','browser-sync', 'copy-assets', 'copy-index-html'], () => {
   gulp.watch(paths.dev.scss, ['styles']); // gulp watch for stylus changes
   gulp.watch(paths.dev.js, ['scripts']); // gulp watch for JS changes
   return buildScript('index.js', true); // browserify watch for JS changes
