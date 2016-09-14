@@ -12,6 +12,7 @@ const browserify = require('browserify');
 const babelify = require('babelify');
 const watchify = require('watchify');
 const notify = require('gulp-notify');
+const nodemon = require('gulp-nodemon');
 
 const eslint = require('gulp-eslint');
 
@@ -40,6 +41,7 @@ const paths = {
     js: './dev/js/**/*.js',
     scss: './dev/scss/**/*.scss',
     assets: './dev/assets/*',
+    server: './server/server.js',
   },
   test: {
     js: './dev/js/**/*.test.js',
@@ -193,11 +195,24 @@ gulp.task('copy-index-html', () => {
 gulp.task('copy-assets', () => {
   return gulp.src(paths.dev.assets)
     .pipe(gulp.dest('./public/assets'));
-})
+});
+
+//*************************************************
+//     N O D E   S E R V E R
+//*************************************************
+gulp.task('nodemon', () => {
+  nodemon({
+    script: paths.dev.server,
+    ext: 'js html',
+    env: { 'NODE_ENV': 'development' },
+  });
+});
+
 //*************************************************
 //     G U L P   W A T C H
 //*************************************************
-gulp.task('default', ['styles','scripts','browser-sync', 'copy-assets', 'copy-index-html'], () => {
+gulp.task('default',
+  ['styles','scripts','browser-sync', 'copy-assets', 'copy-index-html', 'nodemon'], () => {
   gulp.watch(paths.dev.scss, ['styles']); // gulp watch for stylus changes
   gulp.watch(paths.dev.js, ['scripts']); // gulp watch for JS changes
   return buildScript('index.js', true); // browserify watch for JS changes
