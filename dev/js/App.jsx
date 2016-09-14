@@ -10,7 +10,7 @@ const defaultProps = {
 
 export default function App(props) {
   return (
-    <div>This is the APP!</div>
+    <h1 className="appHeader">This is the APP!</h1>
   );
 }
 
