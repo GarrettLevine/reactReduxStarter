@@ -6,6 +6,12 @@
 import _Form from './Form';
 export { _Form as Form };
 
+import _Button from './Button';
+export { _Button as Button };
+
+import _Icon from './Icon';
+export { _Icon as Icon };
+
 import _Input from './Input';
 export { _Input as Input };
 

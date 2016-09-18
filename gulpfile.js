@@ -38,7 +38,7 @@ const historyApiFallback = require('connect-history-api-fallback')
 const paths = {
   dev: {
     index: './dev/index.html',
-    js: './dev/js/**/*.js',
+    js: './dev/js/**/**/*.jsx',
     scss: './dev/scss/**/*.scss',
     assets: './dev/assets/*',
     server: './server/server.js',
