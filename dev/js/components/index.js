@@ -15,6 +15,12 @@ export { _Icon as Icon };
 import _Input from './Input';
 export { _Input as Input };
 
+import _Loader from './Loader';
+export { _Loader as Loader };
+
+import _Header from './Header';
+export { _Header as Header };
+
 import _Checkbox from './Checkbox';
 export { _Checkbox as Checkbox };
 

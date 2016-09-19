@@ -112,9 +112,9 @@ export default function Button(props) {
   };
 
   return (
-    <div>
+    <span>
       {renderButton(type)}
-    </div>
+    </span>
   );
 }
 
