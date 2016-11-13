@@ -212,7 +212,7 @@ gulp.task('nodemon', () => {
 //     G U L P   W A T C H
 //*************************************************
 gulp.task('default',
-  ['styles','scripts','browser-sync', 'copy-assets', 'copy-index-html', 'nodemon'], () => {
+  ['lint', 'styles','scripts','browser-sync', 'copy-assets', 'copy-index-html', 'nodemon'], () => {
   gulp.watch(paths.dev.scss, ['styles']); // gulp watch for stylus changes
   gulp.watch(paths.dev.js, ['scripts']); // gulp watch for JS changes
   return buildScript('index.js', true); // browserify watch for JS changes
