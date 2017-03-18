@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 const propTypes = {
   // proptypes go here
@@ -10,7 +10,7 @@ const defaultProps = {
 
 export default function App(props) {
   return (
-    <h1 className="ui header red">This is the APP!</h1>
+    <h1 className="ui header red">This is the APP! It works, gosh</h1>
   );
 }
 
