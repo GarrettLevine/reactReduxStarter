@@ -15,12 +15,13 @@ const VENDOR_LIBS = [
 
 module.exports = {
   entry: {
-    bundle: './src/js/index.js',
+    bundle: [ './src/js/index.js', './src/scss/main.scss' ],
     vendor: VENDOR_LIBS,
   },
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: '[name].[chunkhash].js'
+    filename: '[name].[chunkhash].js',
+    publicPath: 'http://localhost:8080/',
   },
   module: {
     rules: [
@@ -33,18 +34,14 @@ module.exports = {
       {
         test: /\.scss$/,
         include: path.join(__dirname, 'src'),
-        use: [
-          'style-loader',
-          'css-loader',
-          'sass-loader',
-        ],
+        use: [ 'style-loader', 'css-loader', 'sass-loader' ],
       } 
     ],
   },
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin({
-      names: [ 'vendor', 'manifest' ],
-    }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   names: [ 'vendor', 'manifest' ],
+    // }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
     }),
